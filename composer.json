@@ -1,5 +1,5 @@
 {
-    "name": "framework/thinkphp",
+    "name": "cannon/thinkphp",
     "description": "thinkphp 3.2",
     "require": {
         "php": ">=5.4",
