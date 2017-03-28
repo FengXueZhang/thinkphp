@@ -1,0 +1,22 @@
+{
+    "name": "framework/thinkphp",
+    "description": "thinkphp 3.2",
+    "require": {
+        "php": ">=5.4",
+        "monolog/monolog": "^1.21",
+        "filp/whoops": "^2.1",
+        "aliyuncs/oss-sdk-php": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "cannon",
+            "email": "mr.zhangxuefeng@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [],
+        "psr-4": {
+            "Think\\": "src/"
+        }
+    }
+}
