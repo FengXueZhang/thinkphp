@@ -1,4 +1,3 @@
-# 公司内部使用的PHP框架
 1. 修改了debug方式
 2. 修改了log记录方式
 3. 添加了CLI模式 console.php
@@ -10,7 +9,7 @@
 
 
 使用:
-`composer require framework/thinkphp`
+`composer require cannon/thinkphp`
 
 
 
