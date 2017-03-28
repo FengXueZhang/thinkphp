@@ -21,7 +21,7 @@ return  array(
     'APP_USE_NAMESPACE'     =>  true,    // 应用类库是否使用命名空间
     'APP_SUB_DOMAIN_DEPLOY' =>  false,   // 是否开启子域名部署
     'APP_SUB_DOMAIN_RULES'  =>  array(), // 子域名部署规则
-    'APP_DOMAIN_SUFFIX'     =>  '', // 域名后缀 如果是com.cn net.cn 之类的后缀必须设置
+    'APP_DOMAIN_SUFFIX'     =>  '', // 域名后缀 如果是com.cn net.cn 之类的后缀必须设置    
     'ACTION_SUFFIX'         =>  '', // 操作方法后缀
     'MULTI_MODULE'          =>  true, // 是否允许多模块 如果为false 则必须设置 DEFAULT_MODULE
     'MODULE_DENY_LIST'      =>  array('Common','Runtime'),
@@ -60,7 +60,7 @@ return  array(
     'DB_PWD'                =>  '',          // 密码
     'DB_PORT'               =>  '',        // 端口
     'DB_PREFIX'             =>  '',    // 数据库表前缀
-    'DB_PARAMS'          	=>  array(), // 数据库连接参数
+    'DB_PARAMS'          	=>  array(), // 数据库连接参数    
     'DB_DEBUG'  			=>  TRUE, // 数据库调试模式 开启后可以记录SQL日志
     'DB_FIELDS_CACHE'       =>  true,        // 启用字段缓存
     'DB_CHARSET'            =>  'utf8',      // 数据库编码默认采用utf8
@@ -76,7 +76,7 @@ return  array(
     'DATA_CACHE_PREFIX'     =>  '',     // 缓存前缀
     'DATA_CACHE_TYPE'       =>  'File',  // 数据缓存类型,支持:File|Db|Apc|Memcache|Shmop|Sqlite|Xcache|Apachenote|Eaccelerator
     'DATA_CACHE_PATH'       =>  TEMP_PATH,// 缓存路径设置 (仅对File方式缓存有效)
-    'DATA_CACHE_KEY'        =>  '',	// 缓存文件KEY (仅对File方式缓存有效)
+    'DATA_CACHE_KEY'        =>  '',	// 缓存文件KEY (仅对File方式缓存有效)    
     'DATA_CACHE_SUBDIR'     =>  false,    // 使用子目录缓存 (自动根据缓存标识的哈希创建子目录)
     'DATA_PATH_LEVEL'       =>  1,        // 子目录缓存级别
 
@@ -88,18 +88,14 @@ return  array(
 
     /* 日志设置 */
     'LOG_RECORD'            =>  false,   // 默认不记录日志
-    'LOG_TYPE'              =>  'ThinkMonoLog', // 日志记录类型 默认为文件方式
+    'LOG_TYPE'              =>  'File', // 日志记录类型 默认为文件方式
     'LOG_LEVEL'             =>  'EMERG,ALERT,CRIT,ERR',// 允许记录的日志级别
     'LOG_FILE_SIZE'         =>  2097152,	// 日志文件大小限制
     'LOG_EXCEPTION_RECORD'  =>  false,    // 是否记录异常信息日志
 
-    /* monolog的日志设置 */
-    'MONOLOG_RSYSLOG_FLAG'  => false,
-    'MONOLOG_LOCAL_FLAG'    => true,
-
     /* SESSION设置 */
     'SESSION_AUTO_START'    =>  true,    // 是否自动开启Session
-    'SESSION_OPTIONS'       =>  [], // session 配置数组 支持type name id path expire domain 等参数
+    'SESSION_OPTIONS'       =>  array(), // session 配置数组 支持type name id path expire domain 等参数
     'SESSION_TYPE'          =>  '', // session hander类型 默认无需设置 除非扩展了session hander驱动
     'SESSION_PREFIX'        =>  '', // session 前缀
     //'VAR_SESSION_ID'      =>  'session_id',     //sessionID的提交变量

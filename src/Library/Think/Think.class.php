@@ -27,17 +27,14 @@ class Think {
      * @return void
      */
     static public function start() {
-        // 注册AUTOLOAD方法
-        spl_autoload_register('Think\Think::autoload');
-        // 设定错误和异常处理
-        // 以下任意条件不满足都走ThinkPHP原生错误处理方法, 否则调用新版debug库
-        if (!APP_DEBUG || !defined('APP_DEBUG_OUTPUT') || !APP_DEBUG_OUTPUT) {
-            register_shutdown_function('Think\Think::fatalError');
-            set_exception_handler('Think\Think::appException');
-            set_error_handler('Think\Think::appError');
-        } else {
-            self::whoopsRegister();
-        }
+      // 注册AUTOLOAD方法
+      spl_autoload_register('Think\Think::autoload');
+      // 设定错误和异常处理
+      register_shutdown_function('Think\Think::fatalError');
+      set_exception_handler('Think\Think::appException');
+      if (!defined('APP_DEBUG') || false == APP_DEBUG || !defined('APP_DEBUG_OUTPUT') || false == APP_DEBUG_OUTPUT) {
+          set_error_handler('Think\Think::appError');
+      }
 
       // 初始化文件存储方式
       Storage::connect(STORAGE_TYPE);
@@ -266,23 +263,17 @@ class Think {
 
     // 致命错误捕获
     static public function fatalError() {
-        // 补全一下 最后的令程序停止的错误也记录日志
-        $e = error_get_last();
-        if ($e) {
-            $message = $e['message'] . ' ' . $e['file'] . ' 第 ' . $e['line'] . ' 行.';
-            Log::record($message, Log::EMERG);
-        }
         Log::save();
-        if ($e) {
-            switch ($e['type']) {
-                case E_ERROR:
-                case E_PARSE:
-                case E_CORE_ERROR:
-                case E_COMPILE_ERROR:
-                case E_USER_ERROR:
-                    ob_end_clean();
-                    self::halt($e);
-                    break;
+        if ($e = error_get_last()) {
+            switch($e['type']){
+              case E_ERROR:
+              case E_PARSE:
+              case E_CORE_ERROR:
+              case E_COMPILE_ERROR:
+              case E_USER_ERROR:
+                ob_end_clean();
+                self::halt($e);
+                break;
             }
         }
     }
@@ -297,18 +288,18 @@ class Think {
         if (APP_DEBUG || IS_CLI) {
             //调试模式下输出错误信息
             if (!is_array($error)) {
-                $trace        = debug_backtrace();
-                $e['message'] = $error;
-                $e['file']    = $trace[0]['file'];
-                $e['line']    = $trace[0]['line'];
+                $trace          = debug_backtrace();
+                $e['message']   = $error;
+                $e['file']      = $trace[0]['file'];
+                $e['line']      = $trace[0]['line'];
                 ob_start();
                 debug_print_backtrace();
-                $e['trace'] = ob_get_clean();
+                $e['trace']     = ob_get_clean();
             } else {
-                $e = $error;
+                $e              = $error;
             }
-            if (IS_CLI) {
-                exit(iconv('UTF-8', 'gbk', $e['message']) . PHP_EOL . 'FILE: ' . $e['file'] . '(' . $e['line'] . ')' . PHP_EOL . $e['trace']);
+            if(IS_CLI){
+                exit(iconv('UTF-8','gbk',$e['message']).PHP_EOL.'FILE: '.$e['file'].'('.$e['line'].')'.PHP_EOL.$e['trace']);
             }
         } else {
             //否则定向到错误页面
@@ -351,58 +342,5 @@ class Think {
                 $_trace[$level][]   =   $info;
             }
         }
-    }
-
-    /**
-     * 注册新的debug调试库 whoops
-     *
-     * @author Cui <cuijingyu@digilinx.cn>
-     *
-     * @date   2016-10-20
-     *
-     */
-    static protected function whoopsRegister() {
-        $whoops = new \Whoops\Run();
-        // 判断是否是AJAX 如果是AJAX则使用JSON格式
-        if (\Whoops\Util\Misc::isAjaxRequest()) {
-            $handler = new \Whoops\Handler\JsonResponseHandler();
-            $whoops->pushHandler($handler);
-        } else {
-            $handler = new \Whoops\Handler\PrettyPageHandler();
-            $handler->setPageTitle("邻老板-错误调试");
-            $handler->addDataTable('BUG随时提醒你', [
-                '1.上线要关DEBUG.' => '',
-                '2.上线之前要好好检查代码' => '',
-                '3.注意网站正在全面切换Https' => '',
-                '4.涉及到钱的代码要互相检查' => '',
-                '5.此ThinkPHP框架的核心代码已经改了' => '',
-            ]);
-            $whoops->pushHandler($handler);
-        }
-
-        (new \Whoops\Util\SystemFacade())->registerShutdownFunction(function () {
-            Log::save();
-        });
-
-        // 增加回调以便记录日志;
-        $whoops->pushHandler(function ($exception) {
-            switch ($exception->getCode()) {
-                case E_ERROR:
-                case E_PARSE:
-                case E_CORE_ERROR:
-                case E_COMPILE_ERROR:
-                case E_USER_ERROR:
-                    $errLevel = Log::ERR;
-                    break;
-                default:
-                    $errLevel = Log::NOTICE;
-                    break;
-            }
-
-            $message = $exception->getMessage() . ' ' . $exception->getFile() . ' 第 ' . $exception->getLine() . ' 行.';
-            Log::write($message, $errLevel);
-        });
-
-        $whoops->register();
     }
 }
