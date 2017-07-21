@@ -89,7 +89,7 @@ class Ftp {
      * @return boolean          保存状态，true-成功，false-失败
      */
     public function save($file, $replace=true) {
-        $filename = $this->rootPath . $file['savepath'] . $file['savename'];
+        $filename = $this->rootPath . $file['savepath'] . $file['save_name'];
 
         /* 不覆盖同名文件 */
         // if (!$replace && is_file($filename)) {
@@ -143,6 +143,7 @@ class Ftp {
         $this->link = ftp_connect($host, $port, $timeout);
         if($this->link) {
             if (ftp_login($this->link, $username, $password)) {
+                ftp_pasv($this->link, TRUE);
                return true;
             } else {
                 $this->error = "无法登录到FTP服务器：username - {$username}";
